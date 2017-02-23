@@ -1,11 +1,11 @@
 [HIT Configuration]
-title = Test your reaction time
+title = unknown
 description = Respond as quickly as you can
 amt_keywords = Perception, Psychology, experiment
 lifetime = 24
 us_only = true
 approve_requirement = 95
-contact_email_on_error = youremail@gmail.com
+contact_email_on_error = patrick.laflamme@psych.ubc.ca
 ad_group = jspsych simple experiment example
 psiturk_keywords = reaction time
 organization_name = New Great University
@@ -16,7 +16,7 @@ database_url = sqlite:///participants.db
 table_name = turkdemo
 
 [Server Parameters]
-host = localhost
+host = 0.0.0.0
 port = 22362
 cutoff_time = 30
 logfile = server.log
