@@ -18,6 +18,8 @@ html {
  font-family: 'Open Sans', 'Arial', sans-serif;
  font-size: 18px;
  line-height: 1.6em;
+ color: white;
+ background-color: black;
 }
 
 p {
@@ -90,9 +92,8 @@ button:hover {
  */
 
 
-.jspsych-display-element {
-    width: 800px;
-    margin: 50px auto 50px auto;
+.jspsych-display-element { 
+    margin: 50px 50px 50px 50px;
 }
 
 /*
