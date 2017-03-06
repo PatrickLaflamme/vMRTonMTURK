@@ -50,14 +50,7 @@
     <script>
         /* load psiturk */
         var psiturk = new PsiTurk(uniqueId, adServerLoc, mode);
-        
-        console.log(psiturk.taskdata.get('counterbalance'));
-        
-        visualdef = ' grey box that will flash in the center of the screen.';
-      	auditorydef = 'n auditory click that will be heard through your speakers. To this end, please take a moment to ensure that your speakers are on, and at an audible level. In addition, we ask that you avoid being in a noisy environment for the duration of this experiment. ';
-				
-				if(psiturk.taskdata.get('counterbalance')==0){ firstsection = visualdef; secondsection = auditorydef;}
-				else{firstsection = auditorydef; secondsection = visualdef}
+
         /* text blocks */
 
         var welcome_block = {
@@ -66,46 +59,27 @@
             cont_key: [32]
         };
 
-        var instructions_block_1 = {
+        var instructions_block = {
             type: "text",
-            text: '<p>For this experiment, a stimulus will be presented to you at a constant rate.</p>'									+
-            '<p>Your task is to press the <strong> SPACEBAR </strong> in synchrony with the stimulus so that you press' +
-            ' the spacebar exactly when each stimulus is presented.</p><p> This experiment will be split into two halves'+
-            '. In the first half, the stimulus will be a' + firstsection + ' once the first half is complete, you will' +
-            ' be given a short break, and then you will begin the second half. In the second half of the experiment, '  +
-            'the stimulus will be a' + secondsection + '</p><p>While completing both halves of this task, please keep ' +
-            ' your eyes fixated on the monitor. </p> <p>press the <strong> SPACEBAR </strong> to continue the ' 				+
-            'instructions</p>',
-            timing_post_trial: 0,
-            cont_key: [13]
-        };
-        
-        var instructions_block_2 = {
-            type: "text",
-            text: '<p>Before continuing, there is one more thing you should know about this task. ' +
-            'Every once in a while, the task will temporarily stop and you will be presented with ' +
-            'a thought-sampling screen that will ask you to indicate whether you were <strong>ON '  +
-            'TASK</strong> or <strong>MIND WANDERING</strong> just before the thought-sampling screen appeared.</p>'+
-            '<p>press the <strong> SPACEBAR </strong> to continue the instructions</p>',
-            timing_post_trial: 0,
-            cont_key: [13]
-        };
-        
-        var instructions_block_2 = {
-            type: "text",
-            text: 'Being ON TASK means that, <strong>JUST BEFORE</strong> the thought-sampling screen appeared, you were focused on completing the task. Some examples of <strong>ON TASK</strong> thoughts include thoughts about your performance on the task or thoughts about your response. On the other hand, <strong>MIND WANDERING</strong> means that, <strong>JUST BEFORE</strong> the thought-sampling screen appeared, you were thinking about something completely unrelated to the task. Some examples of <strong>MIND WANDERING</strong> include thoughts about what to eat for dinner, thoughts about plans you have with friends, or thoughts about an upcoming test. Any thoughts that you have that are <strong>NOT</strong> related to this task count as <strong>MIND WANDERING</strong> ',
+            text: "<p>In this experiment, a circle will appear in the center " + 
+                "of the screen.</p><p>If the circle is <strong>blue</strong>, " + 
+                "press the letter F on the keyboard as fast as you can.</p>" + 
+                "<p>If the circle is <strong>orange</strong>, do not press " + 
+                "any key.</p>" + 
+                "<div class='left center-content'><img src='/static/images/grey.png'></img>" + 
+                "<p class='small'><strong>Press the F key</strong></p></div>" + 
+                "<p class='small'><strong>Do not press a key</strong></p></div>" + 
+                "<p>Press any key to begin.</p>",
             timing_post_trial: 1000,
             cont_key: [13]
         };
 
         /* stimulus blocks */
-        {
         
         var n_probes = 18;
         var probe_block_length = 50;
         var probe_placement_array = Array.apply(null, {length: probe_block_length}).map(Number.call, Number)
 				
-				/* prepare the thought_probe trial */
 				var thought_probe = {
 						type: 'text',
 						text: '<div id="Probeinstructions">Please indicate your mental state <strong>JUST BEFORE</strong> this screen appeared:</div>' + 
@@ -174,16 +148,16 @@
 					
         };
         }
-        /* prepare the auditory metronome trials */
-				{
-        var single_auditory_trial = [{
+        /* prepare the sound metronome trials */
+	{
+        var sound_trial = [{
             stimulus: "/static/sounds/click.wav",
             data: {
                 trial_type: 'auditory'
             }
         }];
         
-        var auditory_trial_array = [];
+        var sound_trial_array = [];
         
         var min_probe_value = 10;
         
@@ -195,43 +169,40 @@
 						}
 					while(probe_location < min_probe_value);
 				
-					var pre_probe_auditory_trials = jsPsych.randomization.repeat(single_auditory_trial, probe_location);
+					var pre_probe_sound_trials = jsPsych.randomization.repeat(single_sound_trial, probe_location);
 					
-					var post_probe_auditory_trials = jsPsych.randomization.repeat(single_auditory_trial, probe_block_length - probe_location);
+					var post_probe_sound_trials = jsPsych.randomization.repeat(single_sound_trial, probe_block_length - probe_location);
 				
-					var pre_probe_auditory_block = {
+					var pre_probe_sound_block = {
 							type: "single-audio-delay",
 							choices: [32],
 							delay_stim: 650,
 							timing_stim: 150,
 							timing_response: 1300,
-							timeline: pre_probe_auditory_trials
+							timeline: pre_probe_sound_trials
 					};
 					
-					var post_probe_auditory_block = {
+					var post_probe_sound_block = {
 							type: "single-audio-delay",
 							choices: [32],
 							delay_stim: 650,
 							timing_stim: 150,
 							timing_response: 1300,
-							timeline: post_probe_auditory_trials
+							timeline: post_probe_sound_trials
 					};
 					
 					min_probe_value = probe_location - 40;
 					
-					auditory_trial_array.push(pre_probe_auditory_block);
+					sound_trial_array.push(pre_probe_sound_block);
 					
-					auditory_trial_array.push(thought_probe);
+					sound_trial_array.push(thought_probe);
 					
-					auditory_trial_array.push(pre_probe_auditory_block);
+					sound_trial_array.push(pre_probe_sound_block);
 					
 					
 					
         };
 	}
-				
-				
-				}
         /* debrief block */
 
         var debrief_block = {
@@ -251,10 +222,9 @@
         experiment_blocks.push(welcome_block);
 
         experiment_blocks.push(instructions_block);
-				
-				if(psiturk.taskdata.get('counterbalance')==0){
-        experiment_blocks = experiment_blocks.concat(visual_trial_array);
-				}
+
+        experiment_blocks = experiment_blocks.concat(thought_probe);
+
         experiment_blocks.push(debrief_block);
 
 				
